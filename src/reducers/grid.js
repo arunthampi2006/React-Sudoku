@@ -13,7 +13,7 @@ const initialState = [
 	[3, 0, 0, 9, 0, 2, 0, 0, 5]
 ];
 
-window.gridHistory = window.gridHistory || [];
+window.gridHistory = window.gridHistory || [initialState];
 
 export default function grid(state = cloneDeep(initialState), action) {
     switch(action.type) {
@@ -24,24 +24,33 @@ export default function grid(state = cloneDeep(initialState), action) {
                 val,
                 ...state[row].slice(col + 1)
             ];
-            window.gridHistory.push(state);
-            return [
+            let changeState = [
                 ...state.slice(0, row),
                 changeRow,
                 ...state.slice(row + 1)
-            ];
+            ]
+            window.gridHistory.push(changeState);
+            return changeState;
 
         case 'SOLVE':
             let cloneState = cloneDeep(initialState);
             solver(cloneState);
-            window.gridHistory = [];
+            window.gridHistory = [cloneState];
             return cloneState;
         case 'UNDO':
-            let lstState = window.gridHistory.splice(window.gridHistory.length - 1, 1);
+            let lstState;
+            if (window.gridHistory.length > 1) {
+                window.gridHistory.splice(window.gridHistory.length - 1, 1);
+                lstState = window.gridHistory[window.gridHistory.length - 1];
+            } else {
+                lstState = cloneDeep(initialState);
+                window.gridHistory = [initialState];
+            }
             return lstState;
         case 'CLEAR':
-            window.gridHistory = [];
-            return cloneDeep(initialState);
+            let clrCloneState = cloneDeep(initialState);
+            window.gridHistory = [clrCloneState];
+            return clrCloneState;
         default:
             return state;
     }

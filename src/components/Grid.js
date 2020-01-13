@@ -5,7 +5,7 @@ class Grid extends Component {
     render() {
         const {status, grid} = this.props;
         const {isSolved} = status;
-        const renderBox = (row, col, val) => {
+        const renderBox = (row, val, col) => {
             return (
                 <Box 
                     key={col}

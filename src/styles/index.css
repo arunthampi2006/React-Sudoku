@@ -32,6 +32,8 @@ input {
     font-size: 20px;
     margin-right: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
+    font-weight: bold;
+    box-shadow: 0px 2px 1px 0px #cfcfcf;
 }
 button {
     font-weight: bold;
@@ -51,14 +53,14 @@ button:disabled {
     opacity: 0.2;
 }			
 button.clear {
-    border-radius: 100px;
-    color: black;
-    background-color: #D32F2F;
+    border-radius: 70px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(245, 46, 46);
 }
 button.undo {
-    border-radius: 100px;
+    border-radius: 70px;
     color: black;
-    background-color: #FBC02D;
+    background-color: #d8db05;
 }			
 button.solve {
     background-color: #4CAF50;
@@ -71,7 +73,7 @@ button.check {
 }
 .fixed {
     font-weight: bold;
-    color: #00838F;
+    color: #0f838d;
 }
 .result {
     color: gray;

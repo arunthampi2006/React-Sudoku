@@ -7,7 +7,11 @@
         "name": "Arun Thampi"
     },
     "scripts": {
-        "start": "node server.js"
+        "start": "npm run client:serv",
+        "prod:build": "node server --mode=production --env.NODE_ENV=production",
+        "client:dev": "webpack --config wp-client.js --watch",
+        "client:serv": "node server",
+        "client:prod": "webpack --config wp-prod.js --mode=production --env.NODE_ENV=production"
     },
     "dependencies": {
         "html-webpack-plugin": "^3.2.0",
@@ -24,8 +28,15 @@
         "@babel/preset-react": "^7.7.4",
         "babel-loader": "^8.0.6",
         "babel-preset-react": "^6.24.1",
+        "clean-webpack-plugin": "^3.0.0",
+        "optimize-css-assets-webpack-plugin": "^4.0.0",
         "react-hot-loader": "^4.12.18",
+        "uglifyjs-webpack-plugin": "^1.2.5",
         "webpack": "^4.41.4",
-        "webpack-dev-server": "^3.10.1"
+        "webpack-cli": "^3.3.10",
+        "webpack-dev-server": "^3.10.1",
+        "webpack-merge": "^4.1.2",
+        "css-loader": "^3.4.1",
+        "style-loader": "^1.1.2"
     }
 }

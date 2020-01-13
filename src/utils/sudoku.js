@@ -1,7 +1,4 @@
-import cloneDeep from 'lodash/cloneDeep';
-import range from 'lodash/range';
-import flatten from 'lodash/flatten';
-import includes from 'lodash/includes';
+import { cloneDeep, range, flatten, includes } from "lodash";
 
 const VALUE = range(1,10);
 const DIM = range(0,9);
@@ -9,14 +6,18 @@ const ZERO = 0;
 
 const getRow = (gird, rowPos) => {
     if ( !includes(DIM, rowPos) ) {
-        throw new Error('Row not in the range');
+        console.log('Get Row: Row not in the range');
+        throw new Error('Get Row: Row not in the range');
+        // return false;
     }
     return gird[rowPos];
 }
 
 const getCol = (gird, colPos) => {
     if ( !includes(DIM, colPos) ) {
-        throw new Error('Column not in the range')
+        console.log('Get Col: Column not in the range');
+        throw new Error('Get Col: Column not in the range')
+        // return false;
     }
 
     return gird.map(row => row[colPos]);
@@ -24,6 +25,7 @@ const getCol = (gird, colPos) => {
 
 const getSquare = (grid, rowPos, colPos) => {
     if (!includes(DIM, rowPos) || !includes(DIM, colPos)) {
+        console.log('Get Square: Row or Column are not in the square range');
         throw new Error('Row or Column are not in the square range')
     }
 
@@ -43,11 +45,15 @@ const getSquare = (grid, rowPos, colPos) => {
 
 const getCheck = (grid, rowPos, colPos, number) => {
     if (!includes(DIM, rowPos) || !includes(DIM, colPos)) {
-        throw new Error('Row or Column are not in the square range')
+        console.log('Get check: Row or Column are not in the square range');
+        throw new Error('Get check: Row or Column are not in the square range')
+        // return false;
     }
 
     if (!includes(VALUE, number)) {
+        console.log('Get check: Input number is not in the square range');
         throw new Error('Input number is not in the square range')
+        // return false;
     }
 
     let row = getRow(grid, rowPos);
@@ -62,12 +68,17 @@ const getCheck = (grid, rowPos, colPos, number) => {
 }
 
 const getNext = (rowPos = 0, colPos = 0) => {
-    return rowPos !== 8 ? [rowPos, colPos + 1] : colPos !== 8 ? [rowPos + 1, 0] : [0,0];
+    colPos = colPos + 1;
+    let rowPosChk = colPos % 8;
+    return rowPosChk >= 1 && rowPosChk <= 8 ? [rowPos, colPos] : rowPosChk === 0 ? [rowPos + 1, colPos] : [0,0];
+    // return rowPos !== 8 ? [rowPos, colPos + 1] : colPos !== 8 ? [rowPos + 1, 0] : [0,0];
 }
 
 export const solver = (grid, rowPos = 0, colPos = 0) => {
-    if ( includes(grid, rowPos) < 0 || includes(grid, colPos) < 0) {
+    if (includes(grid, rowPos) < 0 || includes(grid, colPos) < 0) {
+        console.log('Solver: Row or Column are not in the range');
         throw new Error( 'Row or Column are not in the range')
+        // return false;
     }
 
     let isLast = rowPos >= 8 && colPos >= 8;
@@ -76,17 +87,19 @@ export const solver = (grid, rowPos = 0, colPos = 0) => {
         let [nextRowPos, nextColPos] = getNext(rowPos, colPos);
         return solver(grid, nextRowPos, nextColPos);
     }
-
+    let Grid = grid;
     for (let i = 1; i <= 9; i++) {
-        gird[rowPos][colPos] = i;
-        let [nextRowPos, nextColPos] = getNext(rowPos, colPos);
+        if (getCheck(Grid, i, rowPos, colPos)) {
+            Grid[rowPos][colPos] = i;
+            let [nRowPos, nColPos] = getNext(rowPos, colPos);
 
-        if (!nextRowPos && !nextColPos) {
-            return true;
-        }
+            if (!nRowPos && !nColPos) {
+                return true;
+            }
 
-        if (solver(grid, nextRowPos, nextColPos)) {
-            return true;
+            if (solver(Grid, nRowPos, nColPos)) {
+                return true;
+            }
         }
     }
 

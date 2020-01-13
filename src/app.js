@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Grid from './components/Grid';
-import {isSolvable, isComplete, solver} from './utils/sudoku';
+import {isSolvable, isComplete} from './utils/sudoku';
 import { solve, undo, clear} from './actions';
 
 class APP extends Component {
@@ -10,19 +10,22 @@ class APP extends Component {
     }
     
     componentWillMount() {
-        this.unsubscribe();
+        this.unsubscribe && this.unsubscribe();
     }
     
     render() {
         const {store} = this.props;
-        const {grid, status} = store.getStatus();
+        const {grid, status} = store.getState();
         const {isSolved, isEdited} = status;
 
         return (
             <div>
+                
+                <Grid grid={grid} status={status} {...this.props}/>
+
                 <button
                     className='undo'
-                    disabled={window.gridHistory && !window.gridHistory.length}
+                    disabled={window.gridHistory && window.gridHistory.length < 2}
                     onClick={() => store.dispatch(undo())}
                 >
                     ⤺ Undo
@@ -35,8 +38,6 @@ class APP extends Component {
                 >
                     ⟲ Clear
                 </button>
-
-                <Grid grid={grid} status={status} {...this.props}/>
 
                 <button 
                     className='check'

@@ -1,16 +1,19 @@
+const path = require('path');
 const webpack = require('webpack');
 const webpackDevServer = require('webpack-dev-server');
-const config = require('./webpack-config');
-
+const config = require('./wp-client');
+const port = parseInt(process.env.PORT, 10) || '9000';
+console.log('----',webpack(config))
 new webpackDevServer(webpack(config), {
-    publicPath: config.output.publicPath,
+    contentBase: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
     compress: true,
     hot: true,
     open: true,
     historyApiFallback: true
-}).listen(3000, 'localhost', (err, result) => {
+}).listen(port, 'localhost', (err, result) => {
     if (err) {
         console.log('--error--', err);
     }
-    console.log('Listening at the localhost:3000');
+    console.log('Listening at the localhost:9000');
 });

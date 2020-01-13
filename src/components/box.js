@@ -4,15 +4,15 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {inputValue} from '../actions'
 
 const pallet = {
-	'0': '#90CAF9', // Box 1
-	'30': '#1DE9B6', // Box 2
-	'60': '#FFAB91', // Box 3
-	'3': '#D1C4E9', // Box 4
-	'33': '#FFF59D', // Box 5
-	'63': '#A5D6A7', // Box 6
-	'6': '#80CBC4', // Box 7
-	'36': '#F48FB1', // Box 8
-	'66': '#81D4FA', // Box 9
+	'0': '#FAC22E', // Box 1
+	'30': '#2EFABE', // Box 2
+	'60': '#C8B6F9', // Box 3
+	'3': '#E677FB', // Box 4
+	'33': '#77A0FB', // Box 5
+	'63': '#FF6347', // Box 6
+	'6': '#D8FF47', // Box 7
+	'36': '#FF4781', // Box 8
+	'66': '#47FF51', // Box 9
 };
 
 const getBoxColor = (row, col) => {
@@ -33,7 +33,7 @@ class BOX extends Component {
     handleChange(e) {
         const {row, col, store} = this.props;
         const valRange = range(1,10);
-        const val = parent(e.target.value);
+        const val = parseInt(e.target.value);
         const isDeleted = e.target.value === '';
         if (valRange.indexOf(val) > -1 || isDeleted) {
             store.dispatch(inputValue(row, col, isDeleted ? 0 : val));
@@ -50,13 +50,13 @@ class BOX extends Component {
                 className={isFixed ? 'fixed' : isSolved ? 'result' : ''}
                 disabled={isFixed || isSolved}
                 value={val ? val : ''}
-                onChange={this.handleChange}
+                onChange={this.handleChange.bind(this)}
             />
         );
 
         return(
             <td>
-                {
+                <div>{
                     isSolved ?
                     (
                         <ReactCSSTransitionGroup
@@ -68,7 +68,7 @@ class BOX extends Component {
                         >
                         </ReactCSSTransitionGroup>
                     ) : input
-                }
+                }</div>
             </td>
         )
     }
