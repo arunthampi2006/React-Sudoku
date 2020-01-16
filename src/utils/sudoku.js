@@ -26,6 +26,8 @@ const getCol = (gird, colPos) => {
 const getSquare = (grid, rowPos, colPos) => {
     if (!includes(DIM, rowPos) || !includes(DIM, colPos)) {
         console.log('Get Square: Row or Column are not in the square range');
+        // alert('Row or Column are not in the square range')
+        // return false
         throw new Error('Row or Column are not in the square range')
     }
 
@@ -71,7 +73,6 @@ const getNext = (rowPos = 0, colPos = 0) => {
     colPos = colPos + 1;
     let rowPosChk = colPos % 8;
     return rowPosChk >= 1 && rowPosChk <= 8 ? [rowPos, colPos] : rowPosChk === 0 ? [rowPos + 1, colPos] : [0,0];
-    // return rowPos !== 8 ? [rowPos, colPos + 1] : colPos !== 8 ? [rowPos + 1, 0] : [0,0];
 }
 
 export const solver = (grid, rowPos = 0, colPos = 0) => {

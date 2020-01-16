@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Grid from './components/Grid';
 import {isSolvable, isComplete} from './utils/sudoku';
-import { solve, undo, clear} from './actions';
+import { solve, undo, clear, ddChange} from './actions';
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css'
+import {randomSudoku} from './utils/randomsudoku'
 
 class APP extends Component {
     
@@ -10,17 +13,41 @@ class APP extends Component {
     }
     
     componentWillMount() {
+        const {store} = this.props
+        randomSudoku(store).call()
+        this.setState({
+            sudoSelected: {
+                label: 'Sudoku (Medium)',
+                value: 'sudo9'
+            }
+        })
         this.unsubscribe && this.unsubscribe();
+    }
+    selectChange(sudoSelected) {
+        const {store} = this.props;
+        let value = sudoSelected.value;
+        this.setState({sudoSelected})
+        store.dispatch(ddChange(value))
     }
     
     render() {
         const {store} = this.props;
-        const {grid, status} = store.getState();
-        const {isSolved, isEdited} = status;
-
+        const {sudoGrid, status} = store.getState();
+        const {grid, ddItems} = sudoGrid;
+        const {isSolved, isEdited, isTrgr} = status;
+        const {sudoSelected} = this.state;
+        if (isTrgr) {
+            return false;
+        }
         return (
             <div>
-                
+                <Dropdown 
+                    options={ddItems}
+                    placeholder="Select a Sudoku" 
+                    className='sudo-dd'
+                    onChange={this.selectChange.bind(this)}
+                    value={sudoSelected}
+                ></Dropdown>
                 <Grid grid={grid} status={status} {...this.props}/>
 
                 <button
@@ -54,7 +81,7 @@ class APP extends Component {
                         }
                     }
                 >
-                    Check
+                    Validate
                 </button>
 
                 <button

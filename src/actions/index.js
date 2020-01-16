@@ -20,3 +20,15 @@ export function clear() {
         type: 'CLEAR'
     }
 }
+export function ddChange(value) {
+    return {
+        type: 'DD_CHANGE',
+        value
+    }
+}
+export function fetchData(value) {
+    return {
+        type: 'FETCH_DATA',
+        value
+    }
+}

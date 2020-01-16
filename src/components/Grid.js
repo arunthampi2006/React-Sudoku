@@ -3,7 +3,12 @@ import Box from './box';
 
 class Grid extends Component {
     render() {
-        const {status, grid} = this.props;
+        const {status, store} = this.props;
+        const {sudoGrid} = store.getState();
+        let stateGrid = sudoGrid.grid;
+        let {grid} = this.props;
+        grid = grid ? grid : stateGrid;
+        
         const {isSolved} = status;
         const renderBox = (row, val, col) => {
             return (

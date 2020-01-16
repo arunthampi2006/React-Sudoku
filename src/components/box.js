@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import range from 'lodash/range';
+import {range} from 'lodash';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {inputValue} from '../actions'
 
@@ -23,9 +23,16 @@ const getBoxColor = (row, col) => {
 }
 
 class BOX extends Component {
-    componentWillMount() {
+
+    setIsFixed() {
         const {val} = this.props;
-        this.setState({isFixed: val ? true : false});
+        this.setState({
+            isFixed: val ? true : false, 
+            isMount: true
+        });
+    }
+    componentWillMount() {
+        this.setIsFixed()
     }
     shouldComponentUpdate(nextProps, nextState) {
         return nextProps.val !== this.props.val
@@ -41,8 +48,15 @@ class BOX extends Component {
     }
 
     render() {
-        const {row, col, val, isSolved} = this.props;
-        const {isFixed} = this.state;
+        const {row, col, val, isSolved, store} = this.props;
+        const {status} = store.getState();
+        const {isEdited} = status;
+        const {isMount} = this.state;
+        let {isFixed} = this.state;
+        const valChk = val ? true : false;
+        isFixed = !isMount ? isFixed : valChk;
+        isFixed = isFixed && !isEdited;
+
         const input = (
             <input
                 ref='input'

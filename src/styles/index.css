@@ -37,6 +37,7 @@ input {
 }
 button {
     font-weight: bold;
+    font-size: 1em;
     text-align: center;
     background-color: #0277BD;
     color: #FAFAFA;
@@ -44,10 +45,8 @@ button {
     border-radius: 2px;
     margin-top: 20px;
     margin-right: 10px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    padding-right: 10px;
-    padding-left: 10px;
+    padding: 14px;
+    cursor: pointer;
 }
 button:disabled {
     opacity: 0.2;
@@ -63,9 +62,11 @@ button.undo {
     background-color: #d8db05;
 }			
 button.solve {
+    border-radius: 70px;
     background-color: #4CAF50;
 }
 button.check {
+    border-radius: 70px;
     background-color: #03A9F4;
 }
 .footnote{
@@ -83,4 +84,8 @@ button.check {
 }			
 .solved-appear.solved-appear-active {
     opacity: 1;
+}
+.sudo-dd {
+    width: 16%;
+    margin: 0 auto;
 }
