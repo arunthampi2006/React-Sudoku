@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {range} from 'lodash';
+import {range, flatten, includes} from 'lodash';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {inputValue} from '../actions'
 
@@ -39,11 +39,17 @@ class BOX extends Component {
     }
     handleChange(e) {
         const {row, col, store} = this.props;
+        const {sudoGrid} = store.getState();
+        const {grid} = sudoGrid;
         const valRange = range(1,10);
-        const val = parseInt(e.target.value);
         const isDeleted = e.target.value === '';
+        const val = isDeleted ? 0 : parseInt(e.target.value);
+        grid[row][col] = val
+        const gridFlatern = flatten(grid);
+        let isValidTgr = includes(gridFlatern, 0);
+
         if (valRange.indexOf(val) > -1 || isDeleted) {
-            store.dispatch(inputValue(row, col, isDeleted ? 0 : val));
+            store.dispatch(inputValue({row, col, val, isValidTgr}));
         }
     }
 

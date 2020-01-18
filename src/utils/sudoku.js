@@ -1,125 +1,184 @@
-import { cloneDeep, range, flatten, includes } from "lodash";
+import { cloneDeep, range, flatten, includes, reduce } from "lodash";
+import {getMessage} from '../actions';
 
 const VALUE = range(1,10);
 const DIM = range(0,9);
 const ZERO = 0;
+let rowStart = 0;
+let sqrRow = [];
+let sqrCol=[];
+let TOTAL = 45;
+let updatedRows = [];
+let msg = {};
+let cRow = []
+let cCol = []
+let cSquare = []
 
 const getRow = (gird, rowPos) => {
-    if ( !includes(DIM, rowPos) ) {
-        console.log('Get Row: Row not in the range');
-        throw new Error('Get Row: Row not in the range');
-        // return false;
-    }
     return gird[rowPos];
 }
 
 const getCol = (gird, colPos) => {
-    if ( !includes(DIM, colPos) ) {
-        console.log('Get Col: Column not in the range');
-        throw new Error('Get Col: Column not in the range')
-        // return false;
-    }
 
     return gird.map(row => row[colPos]);
 }
 
-const getSquare = (grid, rowPos, colPos) => {
-    if (!includes(DIM, rowPos) || !includes(DIM, colPos)) {
-        console.log('Get Square: Row or Column are not in the square range');
-        // alert('Row or Column are not in the square range')
-        // return false
-        throw new Error('Row or Column are not in the square range')
-    }
+const numberPosCheck = n=> n%3 === 1 ? true : false;
 
-    let rowStart = rowPos - (rowPos % 3);
-    let colStart = colPos - (colPos % 3);
+const getSquare = (grid, rowPos, colPos, n) => {
+    let rPos = (n-n%3);
+    let cn = n%3
+    cn = sqrCol.length ? sqrCol[2] : cn
+    let cPos = (cn+1);
+    cPos = includes(sqrCol, 8) ? 0 : cPos
+    rowStart = numberPosCheck(n) ? rPos : rowStart;
+    let nRow = range(rowStart, rowStart+3);
+    let nCol = !includes(nRow, cPos) ? _.range(cPos, cPos+3) : nRow;
+    let rowStartPos = nRow;
+    let colStartPos = nCol
+    sqrRow = nRow
+    sqrCol = nCol
+
     let sqResult = [];
 
     for(let r = 0; r < 3; r++) {
-        sqResult[r] = sqResult[r] || [];
+        sqResult[r] = sqResult[rowStartPos[r]] || [];
         for (let c = 0; c < 3; c++ ) {
-            sqResult[r].push(grid[rowStart + r][colStart + c]);
+            sqResult[r].push(grid[rowStartPos[r]][colStartPos[c]]);
         }
     }
 
     return flatten(sqResult);
 }
+const listTotal = (prev, nxt) => prev + nxt
 
 const getCheck = (grid, rowPos, colPos, number) => {
-    if (!includes(DIM, rowPos) || !includes(DIM, colPos)) {
-        console.log('Get check: Row or Column are not in the square range');
-        throw new Error('Get check: Row or Column are not in the square range')
-        // return false;
+
+    let row = getRow(grid, (number - 1));
+    let col = getCol(grid, (number - 1));
+    let square = getSquare(grid, rowPos, colPos, number);
+
+
+    if (!includes(row, 0) && !includes(col, 0) && !includes(square, 0)) {
+        let rTotal = reduce(row, listTotal);
+        let cTotal = reduce(row, listTotal);
+        let sqTotal = reduce(square, listTotal);
+
+        let msgRow = msg.row || [];
+        let msgCol = msg.col || [];
+        let msgSquare = msg.square || [];
+
+        if (rTotal !== TOTAL) {
+            msgRow.push(number)
+        }
+        if (cTotal !== TOTAL) {
+            msgCol.push(number)
+        }
+
+        if (sqTotal !== TOTAL) {
+            msgSquare.push(number)
+        } 
+
+        if (msgRow.length || msgSquare.length) {
+            msg.row = msgRow
+            msg.col = msgCol
+            msg.square = msgSquare
+            return false;
+        } else {
+            cRow.push(rTotal)
+            cCol.push(cTotal)
+            cSquare.push(sqTotal)
+            return true;
+        }
+        
+    } else {
+        return false;
     }
-
-    if (!includes(VALUE, number)) {
-        console.log('Get check: Input number is not in the square range');
-        throw new Error('Input number is not in the square range')
-        // return false;
-    }
-
-    let row = getRow(grid, rowPos);
-    let col = getCol(grid, colPos);
-    let square = getSquare(grid, colPos);
-
-    if (!includes(row, number) && !includes(col, number) && !includes(square, number)) {
-        return true;
-    }
-
-    return false;
+    
 }
 
 const getNext = (rowPos = 0, colPos = 0) => {
-    colPos = colPos + 1;
-    let rowPosChk = colPos % 8;
-    return rowPosChk >= 1 && rowPosChk <= 8 ? [rowPos, colPos] : rowPosChk === 0 ? [rowPos + 1, colPos] : [0,0];
+    if (!updatedRows.length) {
+        updatedRows.push(0)
+        return [rowPos, colPos]
+    }
+    if (colPos >= 0 && colPos <= 8) {
+        if (colPos === 8) {
+            updatedRows.push(rowPos+1);
+            return [rowPos+1, 0]
+        } else {
+            return [rowPos, colPos+1]
+        }
+    }
+
 }
 
-export const solver = (grid, rowPos = 0, colPos = 0) => {
-    if (includes(grid, rowPos) < 0 || includes(grid, colPos) < 0) {
-        console.log('Solver: Row or Column are not in the range');
-        throw new Error( 'Row or Column are not in the range')
-        // return false;
-    }
+export const solver = (grid, store, rowPos = 0, colPos = 0) => {
 
     let isLast = rowPos >= 8 && colPos >= 8;
 
     if (grid[rowPos][colPos] !== ZERO && !isLast) {
         let [nextRowPos, nextColPos] = getNext(rowPos, colPos);
-        return solver(grid, nextRowPos, nextColPos);
+        return solver(grid, store, nextRowPos, nextColPos);
     }
     let Grid = grid;
+    let solve = [];
+    cRow = []
+    cCol = []
+    cSquare = []
     for (let i = 1; i <= 9; i++) {
-        if (getCheck(Grid, i, rowPos, colPos)) {
-            Grid[rowPos][colPos] = i;
-            let [nRowPos, nColPos] = getNext(rowPos, colPos);
-
-            if (!nRowPos && !nColPos) {
-                return true;
-            }
-
-            if (solver(Grid, nRowPos, nColPos)) {
-                return true;
-            }
-        }
+        solve.push(getCheck(Grid, rowPos, colPos, i));
     }
 
-    grid[rowPos][colPos] = ZERO;
-    return false;
+    if (includes(solve, false)) {
+        let msgRow = msg.row && msg.row.length ? 
+        'Row: "'+ msg.row.join() + '"are not in the grid range' :
+        'Rows are not in the grid range'
+        let msgCol = msg.col && msg.col.length ? 
+        'Column: "'+ msg.col.join() + '"are not in the grid range' :
+        'Columns are not in the grid range'
+        let msgSquare = msg.col && msg.col.length ? 
+        'Square: "' + msg.square.join() + '" are not in the square range' :
+        'Squares are not in the square range';
+        msg.row = msgRow
+        msg.col = msgCol
+        msg.square = msgSquare
+        msg.validate = false
+        store && store.dispatch(getMessage(msg));
+        msg={};
+        return false;
+    } else {
+        msg.validate = true
+        store && store.dispatch(getMessage(msg));
+        msg={};
+        return true
 }
+    }
+    
 
-export const isSolvable = (grid) => {
+export const isSolvable = (grid, store) => {
     let solvableGrid = cloneDeep(grid);
-    return solver(solvableGrid);
+    return solver(solvableGrid, store);
 }
 
 export const isComplete = grid => {
     let values = flatten(grid);
-    let list = {};
-    values.map(val => list[val] = list[val] ? list[val] : 1);
-    delete list['0'];
-    let total = Object.keys(list).reduce((total, key) => total + list[key], 0);
+    let completArr = [...cRow, ...cCol, ...cSquare];
+    let rwCol = 9
+    let totalRwCol = rwCol*rwCol
+    let total = 45
+    let totalLength = 27
+    let completeTotal = totalLength*total;
+    let gridTotal = reduce(cRow, listTotal)
+    let cArrChk = completArr.length === totalLength && completeTotal === reduce(completArr, listTotal)
+    let girdChk = values.length === totalRwCol && !includes(values, 0) && gridTotal === reduce(values, listTotal)
+    let completeChk = cArrChk && girdChk
+    if (completeChk) {
+        cRow = []
+        cCol = []
+        cSquare = []
+    }
 
-    return total === 81 ? true : false;
+    return completeChk ? true : false;
 }
 

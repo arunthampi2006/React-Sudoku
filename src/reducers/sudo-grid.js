@@ -15,7 +15,7 @@ const sudo = {
 export default function sudoGrid(state = sudo, action) {
     switch(action.type) {
         case 'INPUT_VALUE':
-            const {row, col, val} = action;
+            const {row, col, val} = action.value;
             let changeRow = [
                 ...state.grid[row].slice(0, col),
                 val,
@@ -31,7 +31,6 @@ export default function sudoGrid(state = sudo, action) {
 
         case 'SOLVE':
             let cloneState = cloneDeep(initialState);
-            solver(cloneState);
             window.gridHistory = [cloneState];
             let solveState = state
             solveState.grid = cloneState;

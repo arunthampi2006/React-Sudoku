@@ -1,13 +1,14 @@
-export function inputValue (row, col, val) {
+export function inputValue (value) {
     return {
         type: 'INPUT_VALUE',
-        row, col, val
+        value
     }
 }
 
-export function solve() {
+export function solve(value) {
     return {
-        type: 'SOLVE'
+        type: 'SOLVE',
+        value
     }
 }
 export function undo() {
@@ -29,6 +30,12 @@ export function ddChange(value) {
 export function fetchData(value) {
     return {
         type: 'FETCH_DATA',
+        value
+    }
+}
+export function getMessage(value) {
+    return {
+        type: 'MESSAGE',
         value
     }
 }

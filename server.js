@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const webpackDevServer = require('webpack-dev-server');
 const config = require('./wp-client');
 const port = parseInt(process.env.PORT, 10) || '9000';
-console.log('----',webpack(config))
 new webpackDevServer(webpack(config), {
     contentBase: path.resolve(__dirname, 'dist'),
     publicPath: '/',
