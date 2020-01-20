@@ -63,12 +63,6 @@ export default function sudoGrid(state = sudo, action) {
 
             window.gridHistory = [sudNewState];
             window.initGrid = sudNewState
-            // updateState.grid = window.initGrid;
-
-            // let tstGrds = cloneDeep(updateState.solvedGrids)
-            // if (!includes(tstGrds, sudNewState)) {
-            //     updateState.solvedGrids = cloneDeep([...tstGrds, sudNewState]);
-            // }
 
             return extend({}, state, cloneDeep({grid: sudNewState}));
         case 'FETCH_DATA':
