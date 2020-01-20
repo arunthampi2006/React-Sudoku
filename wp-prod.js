@@ -18,6 +18,10 @@ const htmlWebpackPlugin = new HtmlWebpackPlugin({
 
 const optimizationConfig = {
     mode: 'production',
+    output: {
+      filename: '[name].bundle.js',
+      path: path.resolve(__dirname, 'dist')
+    },
   optimization: {
     minimizer: [
       new UglifyJsPlugin({

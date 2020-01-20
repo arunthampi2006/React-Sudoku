@@ -2,7 +2,7 @@ import axios from 'axios'
 import path from 'path'
 import {map, cloneDeep, flatten} from 'lodash'
 import {fetchData} from '../actions'
-
+const prodPath = 'sudoku-host/'
 export const randomSudoku = store => async => {
     let pathURL = path.join(__dirname, './sudo.json');
     axios.get(pathURL).then(res => {
