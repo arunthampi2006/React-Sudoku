@@ -8,6 +8,7 @@
     },
     "scripts": {
         "start": "npm run client:serv",
+        "serve": "npm run client:serv && npm run client:serv",
         "prod:build": "node server --mode=production --env.NODE_ENV=production",
         "client:dev": "webpack --config wp-client.js --watch",
         "client:serv": "node server",
