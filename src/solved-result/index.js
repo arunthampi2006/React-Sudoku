@@ -3,9 +3,7 @@ import SolveGrid from './solve-grid'
 
 class SolveResult extends Component {
     render() {
-        const {store} = this.props;
-        const {sudoGrid} = store.getState();
-        const {solvedGrids} = sudoGrid
+        const {solvedGrids} = this.props;
         const renderSolveGrids = (solvedGrid, i) => {
             let idx = i + 1;
             return (

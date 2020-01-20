@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import {range, flatten, includes} from 'lodash';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 
@@ -23,10 +22,6 @@ const getBoxColor = (row, col) => {
 }
 
 class SolveBox extends Component {
-
-    shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.val !== this.props.val
-    }
 
     render() {
         const {row, col, val, isSolved} = this.props;

@@ -45,10 +45,11 @@ class APP extends Component {
     solveTrigger() {
         const {store} = this.props;
         const {sudoGrid} = store.getState();
-        const {grid, initGrid} = sudoGrid;
+        const {grid} = sudoGrid;
         if (isComplete(grid)){
             let msg = 'Congratulation, you solved it'
             store.dispatch(solve(msg))
+            let initGrid = window.initGrid
             solver(initGrid, store)
         }
     }
@@ -129,7 +130,7 @@ class APP extends Component {
                 >
                     Solve
                 </button>
-                <SolveResult {...this.props}/>
+                <SolveResult solvedGrids={solvedGrids} {...this.props}/>
             </div>
         )
     }

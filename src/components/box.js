@@ -47,8 +47,9 @@ class BOX extends Component {
         grid[row][col] = val
         const gridFlatern = flatten(grid);
         let isValidTgr = includes(gridFlatern, 0);
+        let pattern = /^[1-9]{1,1}$/
 
-        if (valRange.indexOf(val) > -1 || isDeleted) {
+        if ((pattern.test(val) && includes(valRange,val)) || isDeleted) {
             store.dispatch(inputValue({row, col, val, isValidTgr}));
         }
     }
