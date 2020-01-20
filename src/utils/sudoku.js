@@ -126,10 +126,14 @@ export const solver = (grid, store, rowPos = 0, colPos = 0) => {
     cRow = []
     cCol = []
     cSquare = []
+    let {status} = store.getState()
+    let {isSolved} = status
+    if (isSolved) {
+        return false
+    }
     for (let i = 1; i <= 9; i++) {
         solve.push(getCheck(Grid, rowPos, colPos, i));
     }
-
     if (includes(solve, false)) {
         let msgRow = msg.row && msg.row.length ? 
         'Row: "'+ msg.row.join() + '"are not in the grid range' :

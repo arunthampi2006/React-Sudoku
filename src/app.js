@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Grid from './components/Grid';
-import {isSolvable, isComplete} from './utils/sudoku';
+import {isSolvable, isComplete, solver} from './utils/sudoku';
 import { solve, undo, clear, ddChange} from './actions';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css'
@@ -35,7 +35,7 @@ class APP extends Component {
         const {sudoGrid} = store.getState();
         const {grid} = sudoGrid;
         if (isSolvable(grid, store)) {
-            return alert('This Sudoku is solvable, keep try on to solve...')
+            return alert('This Sudoku is solvable, keep try to solve...')
         } else {
             return alert('This Sudoku is not solvable')
         }
@@ -44,10 +44,11 @@ class APP extends Component {
     solveTrigger() {
         const {store} = this.props;
         const {sudoGrid} = store.getState();
-        const {grid} = sudoGrid;
+        const {grid, initGrid} = sudoGrid;
         if (isComplete(grid)){
             let msg = 'Congratulation, you solved it'
             store.dispatch(solve(msg))
+            solver(initGrid, store)
         }
     }
     render() {

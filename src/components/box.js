@@ -68,7 +68,7 @@ class BOX extends Component {
                 ref='input'
                 style={{backgroundColor: getBoxColor(row, col)}}
                 className={isFixed ? 'fixed' : isSolved ? 'result' : ''}
-                disabled={isFixed || isSolved}
+                disabled={isFixed}
                 value={val ? val : ''}
                 onChange={this.handleChange.bind(this)}
             />
@@ -77,17 +77,18 @@ class BOX extends Component {
         return(
             <td>
                 <div>{
-                    isSolved ?
-                    (
-                        <ReactCSSTransitionGroup
-                            transitionName='solved'
-                            transitionAppear={true}
-                            transitionEnterTimeout={400}
-                            transitionAppearTimeout={400}
-                            transitionLeaveTimeout={400}
-                        >
-                        </ReactCSSTransitionGroup>
-                    ) : input
+                    // isSolved ?
+                    // (
+                    //     <ReactCSSTransitionGroup
+                    //         transitionName='solved'
+                    //         transitionAppear={true}
+                    //         transitionEnterTimeout={400}
+                    //         transitionAppearTimeout={400}
+                    //         transitionLeaveTimeout={400}
+                    //     >
+                    //     </ReactCSSTransitionGroup>
+                    // ) : input
+                    input
                 }</div>
             </td>
         )
