@@ -1,5 +1,4 @@
-import {extend, cloneDeep, isEmpty} from 'lodash'
-import {solver} from '../utils/sudoku'
+import {extend, cloneDeep, isEmpty, includes} from 'lodash'
 import {ddItems} from '../utils/randomsudoku'
 
 let initialState;
@@ -10,7 +9,8 @@ const sudo = {
     grid: [],
     randomSudo: {},
     initGrid: [],
-    ddItems: []
+    ddItems: [],
+    solvedGrids: []
 }
 
 export default function sudoGrid(state = sudo, action) {
@@ -32,10 +32,15 @@ export default function sudoGrid(state = sudo, action) {
 
         case 'SOLVE':
             let solveState = state
+            let solvedGrid = solveState.grid
             let cloneState = cloneDeep(solveState.initGrid);
             window.gridHistory = [cloneState];
             solveState.grid = cloneState;
-            // solver(cloneState, false, true)
+            let solvedGrids = cloneDeep(solveState.solvedGrids)
+            if (!includes(solvedGrids, solvedGrid)) {
+                solveState.solvedGrids = [...solvedGrids, solvedGrid];
+            }
+
             return extend({}, state, solveState);
         case 'UNDO':
             let lstState;
@@ -63,6 +68,12 @@ export default function sudoGrid(state = sudo, action) {
             window.gridHistory = [sudNewState];
             updateState.grid = sudNewState;
             updateState.initGrid = sudNewState
+
+            // let tstGrds = cloneDeep(updateState.solvedGrids)
+            // if (!includes(tstGrds, sudNewState)) {
+            //     updateState.solvedGrids = [...tstGrds, sudNewState];
+            // }
+
             return extend({}, state, updateState);
         case 'FETCH_DATA':
             let {data, isReqTgr} = action.value;

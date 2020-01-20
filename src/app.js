@@ -6,6 +6,7 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css'
 import {randomSudoku} from './utils/randomsudoku'
 import {isEmpty, map, isString} from 'lodash'
+import SolveResult from './solved-result'
 
 class APP extends Component {
     
@@ -54,7 +55,7 @@ class APP extends Component {
     render() {
         const {store} = this.props;
         const {sudoGrid, status} = store.getState();
-        const {grid, ddItems} = sudoGrid;
+        const {grid, ddItems, solvedGrids} = sudoGrid;
         const {isSolved, isEdited, isTrgr, message, validate, isValidTgr} = status;
         const {sudoSelected} = this.state;
         if (isTrgr) {
@@ -85,7 +86,7 @@ class APP extends Component {
             }
         }
         return (
-            <div>
+            <div className="sudo-container">
                 <Dropdown 
                     options={ddItems}
                     placeholder="Select a Sudoku" 
@@ -128,6 +129,7 @@ class APP extends Component {
                 >
                     Solve
                 </button>
+                <SolveResult {...this.props}/>
             </div>
         )
     }
