@@ -71,6 +71,7 @@ class BOX extends Component {
                 className={isFixed ? 'fixed' : isSolved ? 'result' : ''}
                 disabled={isFixed}
                 value={val ? val : ''}
+                maxLength="1"
                 onChange={this.handleChange.bind(this)}
             />
         );

@@ -16,7 +16,7 @@ class SolveResult extends Component {
             )
         }
 
-        return(
+        return ( 
             <div className="solve-result-container">
                 {solvedGrids.map(renderSolveGrids.bind(this))}
             </div>

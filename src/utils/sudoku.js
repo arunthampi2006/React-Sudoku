@@ -61,7 +61,7 @@ const getCheck = (grid, rowPos, colPos, number) => {
 
     if (!includes(row, 0) && !includes(col, 0) && !includes(square, 0)) {
         let rTotal = reduce(row, listTotal);
-        let cTotal = reduce(row, listTotal);
+        let cTotal = reduce(col, listTotal);
         let sqTotal = reduce(square, listTotal);
 
         let msgRow = msg.row || [];

@@ -1,11 +1,9 @@
 import {extend, cloneDeep, isEmpty, includes} from 'lodash'
 import {ddItems} from '../utils/randomsudoku'
 
-let initialState;
+window.gridHistory = cloneDeep(window.gridHistory || []);
+window.initGrid = cloneDeep(window.initGrid || []);
 
-window.gridHistory = window.gridHistory || [];
-window.initGrid = window.initGrid || [];
-initialState = window.initGrid
 const sudo = {
     grid: [],
     randomSudo: {},
@@ -27,13 +25,13 @@ export default function sudoGrid(state = sudo, action) {
                 changeRow,
                 ...state.grid.slice(row + 1)
             ]
-            window.gridHistory.push(changeState);
+            window.gridHistory.push(cloneDeep(changeState));
             return extend({}, state, {grid: changeState});
 
         case 'SOLVE':
             let solveState = state
             let solvedGrid = solveState.grid
-            let cloneState = cloneDeep(initialState);
+            let cloneState = cloneDeep(window.initGrid);
             window.gridHistory = [cloneState];
             solveState.grid = cloneState;
             let solvedGrids = cloneDeep(solveState.solvedGrids)
@@ -43,18 +41,19 @@ export default function sudoGrid(state = sudo, action) {
 
             return extend({}, state, cloneDeep(slvObj));
         case 'UNDO':
-            let lstState;
-            let undoInit = cloneDeep(initialState);
-            if (window.gridHistory.length > 1) {
-                window.gridHistory.splice(window.gridHistory.length - 1, 1);
-                lstState = window.gridHistory[window.gridHistory.length - 1];
-            } else {
-                lstState = undoInit;
+            let lstState = [];
+
+            window.gridHistory.splice(window.gridHistory.length - 1, 1);
+            
+            if (!window.gridHistory.length) {
+                lstState = cloneDeep(window.initGrid);
                 window.gridHistory = [lstState];
+            } else  {
+                lstState = window.gridHistory[window.gridHistory.length - 1];
             }
             return extend({}, state, {grid: lstState});
         case 'CLEAR':
-            let clrCloneState = cloneDeep(initialState);
+            let clrCloneState = cloneDeep(window.initGrid);
             window.gridHistory = [clrCloneState];
             return extend({}, state, {grid: clrCloneState});
         case 'DD_CHANGE':
@@ -62,9 +61,9 @@ export default function sudoGrid(state = sudo, action) {
             let updateState = state;
             let sudNewState = cloneDeep(updateState.randomSudo[value]);
 
-            window.gridHistory = [initialState];
+            window.gridHistory = [sudNewState];
             window.initGrid = sudNewState
-            // updateState.grid = initialState;
+            // updateState.grid = window.initGrid;
 
             // let tstGrds = cloneDeep(updateState.solvedGrids)
             // if (!includes(tstGrds, sudNewState)) {
@@ -81,15 +80,13 @@ export default function sudoGrid(state = sudo, action) {
             updatedRdmState = cloneDeep(updatedRdmState)
             let upStIsEmty = isEmpty(updatedRdmState)
             let dropdownItems = !upStIsEmty ? ddItems(updatedRdmState) : [];
-            initialState = !upStIsEmty ? updatedRdmState['sudo9'] : [];
-            initialState = cloneDeep(initialState)
+            window.initGrid = cloneDeep(!upStIsEmty ? updatedRdmState['sudo9'] : []);
 
             let fetchObj = {}
-            fetchObj.grid = initialState
+            fetchObj.grid = window.initGrid
             fetchObj.randomSudo = updatedRdmState
             fetchObj.ddItems = cloneDeep(dropdownItems)
-            window.gridHistory = [initialState]
-            window.initGrid = initialState
+            window.gridHistory = [window.initGrid]
             return extend({}, state, cloneDeep(fetchObj));
         default:
             return state;
