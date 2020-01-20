@@ -71,7 +71,7 @@ export default function sudoGrid(state = sudo, action) {
             //     updateState.solvedGrids = cloneDeep([...tstGrds, sudNewState]);
             // }
 
-            return extend({}, state, cloneDeep({grid: initialState}));
+            return extend({}, state, cloneDeep({grid: sudNewState}));
         case 'FETCH_DATA':
             let {data, isReqTgr} = action.value;
             let sudoState = state;
