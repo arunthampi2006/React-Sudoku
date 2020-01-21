@@ -16,5 +16,6 @@ React sudoku
 * [react](https://facebook.github.io/react/)
 * [redux](https://github.com/reduxjs/redux)
 * [redux-thunk](https://github.com/reduxjs/redux-thunk)
+* [lodash](https://github.com/lodash/lodash)
 * [babel](https://babeljs.io/)
 * [sonarlint](https://www.sonarlint.org/vscode/)
