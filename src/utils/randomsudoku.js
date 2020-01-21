@@ -2,9 +2,12 @@ import axios from 'axios'
 import path from 'path'
 import {map, cloneDeep, flatten} from 'lodash'
 import {fetchData} from '../actions'
-const prodPath = 'sudoku-host/'
+
+const prodPath = './sudoku-host/sudo.json'
+const clientPath = './sudo.json'
+
 export const randomSudoku = store => async => {
-    let pathURL = path.join(__dirname, './sudo.json');
+    let pathURL = path.join(__dirname, prodPath);
     axios.get(pathURL).then(res => {
         let sudoData = cloneDeep(res.data)
         store.dispatch(fetchData({
