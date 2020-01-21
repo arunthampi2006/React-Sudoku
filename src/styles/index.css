@@ -135,3 +135,12 @@ span.span-box {
     font-size: 1em;
     color: #46c803;
 }
+@media screen and (max-width: 1024px) {
+    .sudo-container .solve-result-container {
+        position:relative;
+        width: auto;
+    }
+    .sudo-dd {
+        width: 20%;
+    }
+}

@@ -17,9 +17,9 @@ export default function status(state = cloneDeep(initialState), action) {
     switch(action.type) {
         case 'INPUT_VALUE':
             let {isValidTgr} = action.value
-            return extend({}, state, {isEdited: true, message: {}, validate: false, isValidTgr});
+            return extend({}, state, {isEdited: true, message: {}, validate: false, isSolved: false, isValidTgr});
         case 'SOLVE':
-            return extend({}, state, {isSolved: true, isEdited: true, message: getValue(action), validate: false});
+            return extend({}, state, {isSolved: true, isEdited: false, message: getValue(action), validate: false});
         case 'CLEAR':
         case 'DD_CHANGE':
             return extend({}, state, {isEdited: false, isSolved: false, message: {}, validate: false, isValidTgr: true})
@@ -39,7 +39,7 @@ export default function status(state = cloneDeep(initialState), action) {
             let {value} = action;
             let {validate} = value;
             delete value.validate;
-            return extend({}, state, {isEdited: false, message: value, validate })
+            return extend({}, state, {isEdited: true, message: value, validate })
         default:
             return state;
     }
