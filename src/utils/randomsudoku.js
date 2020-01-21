@@ -6,6 +6,7 @@ import {fetchData} from '../actions'
 const prodPath = './sudoku-host/sudo.json'
 const clientPath = './sudo.json'
 
+
 export const randomSudoku = store => async => {
     let pathURL = path.join(__dirname, prodPath);
     axios.get(pathURL).then(res => {
