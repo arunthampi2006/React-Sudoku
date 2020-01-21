@@ -8,7 +8,7 @@ const clientPath = './sudo.json'
 
 
 export const randomSudoku = store => async => {
-    let pathURL = path.join(__dirname, prodPath);
+    let pathURL = path.join(__dirname, clientPath);
     axios.get(pathURL).then(res => {
         let sudoData = cloneDeep(res.data)
         store.dispatch(fetchData({
